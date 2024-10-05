@@ -25,11 +25,17 @@
 
       <!-- Pagination controls -->
       <div class="pagination">
-        <button @click="prevPage" :disabled="currentPage === 1">Prev</button>
+        <span @click="prevPage" class="pg_btn" :disabled="currentPage === 1">{{
+          left
+        }}</span>
         <span>{{ currentPage }} / {{ totalPages }}</span>
-        <button @click="nextPage" :disabled="currentPage === totalPages">
-          Next
-        </button>
+        <span
+          class="pg_btn"
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+        >
+          {{ right }}
+        </span>
       </div>
     </div>
   </div>
@@ -46,13 +52,15 @@ const props = defineProps({
   },
 });
 
+const left = "<";
+const right = ">";
 // Get today's date in the desired format
 const today = computed(() => {
   const date = new Date();
   return date.toLocaleDateString("en-GB"); // Adjust the locale as needed
 });
 
-const sortBy = ref("date");
+const sortBy = ref("rating");
 
 // Mock comments data with date in ISO format for proper sorting
 const comments = ref([
@@ -64,6 +72,7 @@ const comments = ref([
     text: "This is an awesome adventure that I had! Thanks!",
     value: "Nature",
     rating: 4,
+    likes: 4,
   },
   {
     id: 2,
@@ -73,6 +82,7 @@ const comments = ref([
     text: "Great experience, love it!",
     value: "Adventure",
     rating: 4,
+    likes: 13,
   },
   {
     id: 3,
@@ -82,6 +92,7 @@ const comments = ref([
     text: "Not bad but could be better!",
     value: "Adventure",
     rating: 4,
+    likes: 13,
   },
   {
     id: 4,
@@ -91,6 +102,7 @@ const comments = ref([
     text: "Fantastic trip!",
     value: "Adventure",
     rating: 4,
+    likes: 21,
   },
   {
     id: 5,
@@ -100,6 +112,7 @@ const comments = ref([
     text: "Just okay.",
     value: "Adventure",
     rating: 2,
+    likes: 6,
   },
   {
     id: 6,
@@ -109,6 +122,7 @@ const comments = ref([
     text: "Amazing view!",
     value: "Adventure",
     rating: 3,
+    likes: 21,
   },
   {
     id: 7,
@@ -118,6 +132,7 @@ const comments = ref([
     text: "It was fine.",
     value: "Adventure",
     rating: 3,
+    likes: 41,
   },
   {
     id: 8,
@@ -127,6 +142,7 @@ const comments = ref([
     text: "So enjoyable!",
     value: "Adventure",
     rating: 3,
+    likes: 24,
   },
   {
     id: 9,
@@ -136,6 +152,7 @@ const comments = ref([
     text: "Nice but not great.",
     value: "Fashion",
     rating: 2,
+    likes: 32,
   },
   {
     id: 10,
@@ -145,6 +162,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Modern",
     rating: 5,
+    likes: 12,
   },
   {
     id: 11,
@@ -154,6 +172,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Modern",
     rating: 5,
+    likes: 23,
   },
   {
     id: 12,
@@ -163,6 +182,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Nature",
     rating: 5,
+    likes: 12,
   },
   {
     id: 13,
@@ -172,6 +192,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Fashion",
     rating: 5,
+    likes: 421,
   },
 
   {
@@ -182,6 +203,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Fashion",
     rating: 5,
+    likes: 42,
   },
   {
     id: 15,
@@ -191,6 +213,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Modern",
     rating: 5,
+    likes: 23,
   },
   {
     id: 16,
@@ -200,6 +223,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Modern",
     rating: 5,
+    likes: 310,
   },
   {
     id: 17,
@@ -209,6 +233,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Modern",
     rating: 5,
+    likes: 230,
   },
 
   {
@@ -219,6 +244,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Nature",
     rating: 5,
+    likes: 23,
   },
   {
     id: 20,
@@ -228,6 +254,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Nature",
     rating: 5,
+    likes: 10,
   },
   {
     id: 19,
@@ -237,6 +264,7 @@ const comments = ref([
     text: "Incredible trip!",
     value: "Nature",
     rating: 5,
+    likes: 19,
   },
   // Add more comments as needed
 ]);
@@ -263,10 +291,9 @@ const sortedComments = computed(() => {
 // Filter comments based on selected type
 const filteredComments = computed(() => {
   return sortedComments.value.filter(
-    (comment) => !props.selectedType || comment.value === props.selectedType
+    (comment) => comment.value === (props.selectedType || "Adventure")
   );
 });
-
 // Get the paginated comments for the current page
 const paginatedComments = computed(() => {
   const start = (currentPage.value - 1) * commentsPerPage;
@@ -305,7 +332,9 @@ select {
   position: relative;
   width: 100%;
 }
-
+.pg_btn {
+  cursor: pointer;
+}
 /* Dropdown arrow (custom appearance) */
 
 /* Hover state */

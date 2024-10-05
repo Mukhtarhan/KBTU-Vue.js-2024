@@ -65,7 +65,10 @@ const filterComments = (type) => {
 
 <style scoped>
 .container {
-  background-color: yellowgreen;
+  background-image: url("./assets/bg.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 /* Sidebar styling */
 .sidebar {
